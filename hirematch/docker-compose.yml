@@ -1,0 +1,17 @@
+version: "3.9"
+
+services:
+  hirematch-api:
+    build:
+      context: .
+      dockerfile: docker/app/Dockerfile
+    restart: unless-stopped
+    ports:
+      - "8001:8001"
+    environment:
+      ENVIRONMENT: ${ENVIRONMENT:-production}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5

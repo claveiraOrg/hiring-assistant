@@ -1,0 +1,16 @@
+name: Deploy hirematch
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "hirematch/**"
+
+jobs:
+  deploy-frontend:
+    name: Deploy hirematch to Dokploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Dokploy webhook
+        run: |
+          curl -s -f -X POST "${{ secrets.DOKPLOY_WEBHOOK_FRONTEND }}"
