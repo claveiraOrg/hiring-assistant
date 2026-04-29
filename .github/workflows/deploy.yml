@@ -22,7 +22,12 @@ jobs:
     runs-on: ubuntu-latest
     if: contains(github.event.commits[0].modified, 'hirematch/')
     steps:
-      - name: Trigger Dokploy frontend deploy
+      - name: Trigger Dokploy hirematch-api deploy
+        env:
+          DOKPLOY_API_KEY: ${{ secrets.DOKPLOY_API_KEY }}
         run: |
-          curl -s -o /dev/null -w "%{http_code}" \
-            -X POST "${{ secrets.DOKPLOY_WEBHOOK_FRONTEND }}"
+          curl -s -f -X POST \
+            -H "x-api-key: $DOKPLOY_API_KEY" \
+            -H "Content-Type: application/json" \
+            -d '{"json":{"composeId":"H-3aI58pTbMYdsfSnmvcW"}}' \
+            "${{ secrets.DOKPLOY_WEBHOOK_FRONTEND }}"
