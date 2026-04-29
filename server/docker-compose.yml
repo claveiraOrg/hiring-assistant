@@ -1,0 +1,46 @@
+services:
+  hermes-api:
+    build:
+      context: .
+      dockerfile: docker/app/Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql+asyncpg://hermes:hermes@hermes-db:5432/hermes
+      REDIS_URL: redis://hermes-redis:6379
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
+      ENVIRONMENT: ${ENVIRONMENT:-production}
+    depends_on:
+      hermes-db:
+        condition: service_healthy
+      hermes-redis:
+        condition: service_started
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  hermes-db:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_USER: hermes
+      POSTGRES_PASSWORD: hermes
+      POSTGRES_DB: hermes
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U hermes -d hermes"]
+      interval: 2s
+      timeout: 5s
+      retries: 30
+    volumes:
+      - ./docker/db/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - hermes_pgdata:/var/lib/postgresql/data
+
+  hermes-redis:
+    image: redis:7-alpine
+    volumes:
+      - hermes_redis_data:/data
+
+volumes:
+  hermes_pgdata:
+  hermes_redis_data:
