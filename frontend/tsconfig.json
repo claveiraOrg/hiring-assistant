@@ -10,7 +10,9 @@
     "jsx": "react-jsx",
     "strict": true,
     "skipLibCheck": true,
-    "allowImportingTsExtensions": true
+    "allowImportingTsExtensions": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true
   },
   "include": ["src", "vite.config.ts"]
 }

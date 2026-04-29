@@ -1,18 +1,17 @@
-FROM node:20-alpine AS builder
+FROM oven/bun:1.1-alpine AS builder
 WORKDIR /app
-COPY package.json package-lock.json* ./
-RUN npm ci
+COPY package.json bun.lock* ./
+RUN bun install --frozen-lockfile
 COPY . .
 
-ARG VITE_HIREMATCH_API_URL=http://localhost:8001
-ARG VITE_HIREMATCH_API_KEY=dev-secret-key
-ENV VITE_HIREMATCH_API_URL=$VITE_HIREMATCH_API_URL
-ENV VITE_HIREMATCH_API_KEY=$VITE_HIREMATCH_API_KEY
+ARG VITE_API_URL=http://178.104.211.230:8001
+ENV VITE_API_URL=$VITE_API_URL
 
-RUN npm run build
+RUN bun run build
 
-FROM nginx:alpine
-COPY --from=builder /app/dist /usr/share/nginx/html
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+FROM oven/bun:1.1-alpine AS runner
+WORKDIR /app
+RUN bun add serve@14
+COPY --from=builder /app/dist ./dist
 EXPOSE 3000
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["bunx", "serve", "-s", "dist", "-l", "3000"]

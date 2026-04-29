@@ -1,25 +1,31 @@
 {
-  "name": "hiring-assistant-frontend",
+  "name": "hirematch-frontend",
   "version": "0.1.0",
   "private": true,
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
-    "preview": "vite preview --port 3000",
-    "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "test": "echo \"No tests yet\" && exit 0"
+    "build": "vite build && tsc --noEmit",
+    "preview": "vite preview --port 3000"
   },
   "dependencies": {
-    "@tanstack/react-router": "^1",
-    "react": "^18",
-    "react-dom": "^18"
+    "@tanstack/react-form": "^0.34.4",
+    "@tanstack/react-query": "^5.56.2",
+    "@tanstack/react-router": "^1.58.3",
+    "@tanstack/react-table": "^8.20.5",
+    "ky": "^1.7.2",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
-    "@vitejs/plugin-react": "^4",
-    "typescript": "^5",
-    "vite": "^5"
+    "@tanstack/router-plugin": "^1.58.3",
+    "@types/react": "^18.3.5",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.45",
+    "tailwindcss": "^3.4.11",
+    "typescript": "^5.5.3",
+    "vite": "^5.4.1"
   }
 }
