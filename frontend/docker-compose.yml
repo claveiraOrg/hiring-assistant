@@ -1,0 +1,14 @@
+version: "3.9"
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: http://178.104.211.230:8001
+        VITE_HIREMATCH_API_KEY: dev-secret-key
+    restart: unless-stopped
+    ports:
+      - "3001:3000"
+
