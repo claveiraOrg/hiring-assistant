@@ -1,0 +1,45 @@
+services:
+  hirematch-api:
+    build:
+      context: .
+      dockerfile: docker/app/Dockerfile
+    ports:
+      - "8001:8001"
+    environment:
+      DATABASE_URL: ${DATABASE_URL:-postgresql+asyncpg://hirematch:hirematch@hirematch-db:5432/hirematch}
+      REDIS_URL: ${REDIS_URL:-redis://hirematch-redis:6379}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
+      ENVIRONMENT: ${ENVIRONMENT:-production}
+    depends_on:
+      hirematch-db:
+        condition: service_healthy
+      hirematch-redis:
+        condition: service_started
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  hirematch-db:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_USER: hirematch
+      POSTGRES_PASSWORD: hirematch
+      POSTGRES_DB: hirematch
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U hirematch -d hirematch"]
+      interval: 2s
+      timeout: 5s
+      retries: 30
+    volumes:
+      - hirematch_pgdata:/var/lib/postgresql/data
+
+  hirematch-redis:
+    image: redis:7-alpine
+    volumes:
+      - hirematch_redis_data:/data
+
+volumes:
+  hirematch_pgdata:
+  hirematch_redis_data:
