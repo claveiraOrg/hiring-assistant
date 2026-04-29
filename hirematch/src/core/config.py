@@ -7,8 +7,9 @@ class Settings(BaseSettings):
     environment: str = "development"
     database_url: str = "postgresql+asyncpg://postgres:postgres@db:5432/hirematch"
     anthropic_api_key: str = ""
-    api_key: str = "dev-api-key"  # X-API-Key header value
+    api_key: str = "dev-api-key"
     anthropic_model: str = "claude-sonnet-4-6"
+    cors_origins: list[str] = ["http://localhost:3000"]
 
 
 settings = Settings()

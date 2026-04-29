@@ -85,18 +85,11 @@ services:
     build:
       context: ./frontend
       args:
-        NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:-}
-        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:8000}
-        NEXT_PUBLIC_CLERK_SIGN_IN_URL: ${NEXT_PUBLIC_CLERK_SIGN_IN_URL:-/sign-in}
-        NEXT_PUBLIC_CLERK_SIGN_UP_URL: ${NEXT_PUBLIC_CLERK_SIGN_UP_URL:-/sign-up}
-        NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL: ${NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL:-/dashboard}
-        NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL: ${NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL:-/dashboard}
+        VITE_HIREMATCH_API_URL: ${VITE_HIREMATCH_API_URL:-http://localhost:8001}
+        VITE_HIREMATCH_API_KEY: ${HIREMATCH_API_KEY:-dev-secret-key}
     restart: unless-stopped
     ports:
       - "3000:3000"
-    environment:
-      HIREMATCH_API_URL: ${HIREMATCH_API_URL:-http://hirematch:8001}
-      HIREMATCH_API_KEY: ${HIREMATCH_API_KEY:-dev-secret-key}
     depends_on:
       hirematch:
         condition: service_healthy
