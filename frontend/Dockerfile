@@ -1,4 +1,4 @@
-FROM oven/bun:1.1-alpine AS builder
+FROM oven/bun:latest AS builder
 WORKDIR /app
 COPY package.json bun.lock* ./
 RUN bun install --frozen-lockfile
@@ -9,9 +9,10 @@ ENV VITE_API_URL=$VITE_API_URL
 
 RUN bun run build
 
-FROM oven/bun:1.1-alpine AS runner
+FROM oven/bun:latest AS runner
 WORKDIR /app
 RUN bun add serve@14
 COPY --from=builder /app/dist ./dist
 EXPOSE 3000
 CMD ["bunx", "serve", "-s", "dist", "-l", "3000"]
+
