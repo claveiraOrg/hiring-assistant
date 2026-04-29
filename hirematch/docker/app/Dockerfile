@@ -5,6 +5,7 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc \
     curl \
+    libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
 COPY pyproject.toml .
@@ -14,4 +15,5 @@ COPY . .
 
 EXPOSE 8001
 
-CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8001"]
+# Run migrations then start the server
+CMD ["sh", "-c", "alembic upgrade head && uvicorn src.main:app --host 0.0.0.0 --port 8001"]
